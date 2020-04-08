@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+    font-family: Arial;
+    border-collapse: collapse;
+    border: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-spacing: 0px;
+    color: #888;
+    text-decoration: none;
+    font-size: 11px;
+}
+li {
+	height: 32px;
+    width: calc(100%-16px);
+    padding-left: 16px;
+    border-bottom: 1px solid #888;
+    line-height: 32px;
+    font-size: 11px;
+    position: relative;
+}
+.select{background-color:#eee; color:#000;}
+.button{
+	border-radius: 32px;
+	width: 100%;
+	height: 90%;
+}
+</style>
+</head>
+<body onload="hash_list('words.json')">
+<input type="file" id="json_file" style="display: none; position: fixed;"/>
+<table style="height: 100vh; width: calc(100% - 1px);">
+	<tbody>
+		<tr>
+        <td align='center'><img onclick="json_file.click()" width='28px' height='28px' src='img/load.svg'></td>
+		<td align='center'><div>Количество хештегов: <span id="hashs">0</span> / 30</div></td>
+	</tr>
+	<tr>
+		<td style="height: 75vh; min-width: 128px; width: 25%; border: 1px solid #888;">
+			<div style="height: 100%; width:100%; overflow: scroll;">
+				<ul id='taglist'>
+				</ul>
+			</div>
+		</td>
+		<td align='right' style='border: 1px solid #888;'>
+			<textarea id="alltext" style="height:75vh; width:100%;"></textarea>
+		</td>
+	</tr>
+		<tr>
+		<td  colspan="2"  align='center'>
+			<table align='center' border='0'>
+			<tbody>
+			<tr>
+				<td  width='25px'>
+				</td>
+				<td align='center' width='256px' height='48px'>
+					<table class='button' onclick='text_clear()' style='background-color:#eee;'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/close.svg'></td><td align='center' id='copu' style='color: #000; font-size: 14px;'>Clear</td><td align='center' width='48px'></td></tr></tbody></table>
+				</td>
+				
+				<td  width='25px'>
+				</td>
+				
+				<td align='center' width='256px' height='48px'>
+					<table class='button' onclick='text_copy();' style='background-color:#eee;'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/copy.svg'></td><td align='center' id='past' style='color: #000; font-size: 14px;'>Copy</td><td align='center' width='48px'></td></tr></tbody></table>
+				</td>
+				<td  width='25px'>
+				</td>
+			</tr>
+			</tbody>
+			</table>
+		</td>
+	</tr>
+	</tbody>
+</table>
+<script type="text/javascript" src="cordova.js"></script>
+<script>
+    var alltags;
+    var img_file = document.getElementById('json_file');
+    img_file.addEventListener('change', loadFiles);
+    function loadFiles(e) {
+        hash_list(URL.createObjectURL(e.target.files[0]))
+    }
+    function hash_list(url) {
+        var ul = document.getElementById("taglist");
+        var child = ul.lastElementChild;
+        while (child) {
+            ul.removeChild(child);
+            child = ul.lastElementChild;
+        }
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                alltags = JSON.parse(this.responseText);
+                create_taglist(alltags.all.length )
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+    function create_taglist(count) {
+        var ul = document.getElementById("taglist");
+        for (i=0; i < count; i++){
+            var li = document.createElement("li");
+            li.id = alltags.all[i];
+            li.appendChild(document.createTextNode(alltags.all[i].toUpperCase()));
+            li.setAttribute('onclick', "addtag(" + JSON.stringify(alltags.all[i]) + ")");
+            ul.appendChild(li);
+        }
+    }
+    function addtag(name) {
+        var text = document.getElementById("alltext");
+        var b = document.getElementById(name);
+        if ( b.classList.contains("select") ){
+            for (i=0; i < alltags.lang.length ; i++){
+                var srting = ""
+                if (alltags[name][alltags.lang[i]]){srting = alltags[name][alltags.lang[i]];}
+                if (srting) {
+                    text.value = text.value.replace(' #' + srting,'');;
+                }
+            }
+            b.classList.remove("select");
+        } else {
+            for (i=0; i < alltags.lang.length ; i++){
+                var srting = ""
+                if (alltags[name][alltags.lang[i]]){srting = alltags[name][alltags.lang[i]];}
+                if (srting != ""){
+                    text.value += " #" + srting
+                }
+            }
+            b.classList.add("select");
+        }
+        count_hash()
+    }
+    function text_clear() {
+        var all_selec = document.getElementsByTagName("li")
+        for (i=0; i < all_selec.length ; i++){
+            all_selec[i].classList.remove("select");
+        }
+        document.getElementById("alltext").value = ""
+        count_hash()
+    }
+    function text_copy() {
+        var copyText = document.getElementById("alltext");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999)
+        document.execCommand("copy");
+        count_hash()
+    }
+    function count_hash() {
+        var text = document.getElementById("alltext").value
+        document.getElementById("hashs").innerHTML = (text.split("#").length - 1)
+    }
+</script>
+</body>
+</html>
