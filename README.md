@@ -6,3 +6,25 @@ The Hashtag dictionary can be downloaded from outside via a json file. It lists 
 The application has a tag counter and a convenient interface for adding and removing tags.
 
 ![HashTag Dictionary](screen.png)
+
+# Dictionary json file
+
+``` json
+{
+"lang": [
+    "en",
+    "ru",
+    "ja",
+    "ko"
+  ],
+  "all":[
+    "art"
+  ],
+  "art": {
+    "en": "art",
+    "ru": "арт",
+    "ja": "芸術",
+    "ko": "예술"
+    }
+}
+```
