@@ -5,6 +5,8 @@ HT Dictionary will help you quickly select the right tags for your publication i
 The Hashtag dictionary can be downloaded from outside via a json file. It lists a set of tags, supported languages, and additional suitable tags.
 The application has a tag counter and a convenient interface for adding and removing tags.
 
+Download for android https://play.google.com/store/apps/details?id=com.ed.hashtag_master
+
 ![HashTag Dictionary](screen.png)
 
 # Dictionary json file
