@@ -13,6 +13,7 @@
     color: #888;
     text-decoration: none;
     font-size: 11px;
+    outline: 0;
 }
 li {
 	height: 32px;
@@ -22,21 +23,74 @@ li {
     line-height: 32px;
     font-size: 11px;
     position: relative;
+    cursor:pointer;
 }
 .select{background-color:#eee; color:#000;}
 .button{
 	border-radius: 32px;
 	width: 100%;
 	height: 90%;
+    cursor:pointer;
 }
+#editor {
+    position: absolute;
+    top: 20%;
+    transform: translateX(-50%);
+    left: 50%;
+    background-color:#fff;
+    border-radius: 16px;
+    max-width: 256px;
+    width:90%;
+    box-shadow: 0px 2px 24px rgba(0,0,0,0.25);
+    z-index: 10000;
+    padding: 8px;
+    visibility:hidden;
+}
+input {
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  font-family: inherit;
+  -webkit-appearance: none;
+  border-radius: 0;
+  padding: 0;
+  cursor: text;
+}
+
+input:focus {
+  border-bottom: 1px solid #666;
+}
+.notification {
+    content: url('img/edit.svg');
+    background: none;
+    height: 2.5em;
+    width: 2.5em;
+    border: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+ }
+.notification:checked  {
+    content: url('img/edit_on.svg');
+    background: none;
+ }
 </style>
 </head>
-<body onload="hash_list('words.json')">
+<body onload="load_hash()">
 <input type="file" id="json_file" style="display: none; position: fixed;"/>
 <table style="height: 100vh; width: calc(100% - 1px);">
 	<tbody>
 		<tr>
-        <td align='center'><img onclick="json_file.click()" width='28px' height='28px' src='img/load.svg'></td>
+        <td align='center'>
+            <table width="100%">
+                <tbody>
+                    <tr>
+                    <td align='center'><input id="edit_mode" type="checkbox" class="notification"></td>
+                    <td align='center'><img onclick="json_file.click()" style='cursor:pointer;' width='28px' height='28px' src='img/load.svg'></td>
+                    <td align='center'><img onclick="save_file()" style='cursor:pointer;' width='28px' height='28px' src='img/save.svg'></td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
 		<td align='center'><div>Количество хештегов: <span id="hashs">0</span> / 30</div></td>
 	</tr>
 	<tr>
@@ -76,10 +130,34 @@ li {
 	</tr>
 	</tbody>
 </table>
-<script type="text/javascript" src="cordova.js"></script>
+
+<div id='editor'>
+    <table style="height: 100%; width: 100%;">
+    <tbody>
+        <tr>
+            <td id="edit_tags" style="height: 100%; width: 100%; padding-top:24px;"></td>
+        </tr>
+        <tr>
+            <td style="width: 50%; height:48px; padding-top:24px;">
+                <table class='button' onclick='delete_tags()' style='background-color:#eee;'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/delet.svg'></td><td align='center' id='past' style='color: #000; font-size: 14px;'>Delete</td><td align='center' width='48px'></td></tr></tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:50%; height:48px; padding-top:12px;">
+                <table class='button' onclick='update_tags()' style='background-color:#eee;'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/ok.svg'></td><td align='center' id='copu' style='color: #000; font-size: 14px;'>OK</td><td align='center' width='48px'></td></tr></tbody></table>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+<a id="downloadAnchorElem" style="display:none">
+<!--<script type="text/javascript" src="cordova.js"></script>-->
 <script>
     var alltags;
     var img_file = document.getElementById('json_file');
+    var ul = document.getElementById("taglist");
+    var edit_mode = false;
+    let edit_tag;
     img_file.addEventListener('change', loadFiles);
     function loadFiles(e) {
         hash_list(URL.createObjectURL(e.target.files[0]))
@@ -96,13 +174,14 @@ li {
             if (this.readyState == 4 && this.status == 200) {
                 alltags = JSON.parse(this.responseText);
                 create_taglist(alltags.all.length )
+                save_hash()
+                create_new()
             }
         };
         xmlhttp.open("GET", url, true);
         xmlhttp.send();
     }
     function create_taglist(count) {
-        var ul = document.getElementById("taglist");
         for (i=0; i < count; i++){
             var li = document.createElement("li");
             li.id = alltags.all[i];
@@ -112,28 +191,33 @@ li {
         }
     }
     function addtag(name) {
-        var text = document.getElementById("alltext");
-        var b = document.getElementById(name);
-        if ( b.classList.contains("select") ){
-            for (i=0; i < alltags.lang.length ; i++){
-                var srting = ""
-                if (alltags[name][alltags.lang[i]]){srting = alltags[name][alltags.lang[i]];}
-                if (srting) {
-                    text.value = text.value.replace(' #' + srting,'');;
-                }
-            }
-            b.classList.remove("select");
+        var checkBox = document.getElementById("edit_mode");
+        if (checkBox.checked == true) {
+            editor (true, name)
         } else {
-            for (i=0; i < alltags.lang.length ; i++){
-                var srting = ""
-                if (alltags[name][alltags.lang[i]]){srting = alltags[name][alltags.lang[i]];}
-                if (srting != ""){
-                    text.value += " #" + srting
+            var text = document.getElementById("alltext");
+            var b = document.getElementById(name);
+            if ( b.classList.contains("select") ){
+                for (i=0; i < alltags.lang.length ; i++){
+                    var srting = ""
+                    if (alltags[name][alltags.lang[i]]){srting = alltags[name][alltags.lang[i]];}
+                    if (srting) {
+                        text.value = text.value.replace(' #' + srting,'');;
+                    }
                 }
+                b.classList.remove("select");
+            } else {
+                for (i=0; i < alltags.lang.length ; i++){
+                    var srting = ""
+                    if (alltags[name][alltags.lang[i]]){srting = alltags[name][alltags.lang[i]];}
+                    if (srting != ""){
+                        text.value += " #" + srting
+                    }
+                }
+                b.classList.add("select");
             }
-            b.classList.add("select");
+            count_hash()
         }
-        count_hash()
     }
     function text_clear() {
         var all_selec = document.getElementsByTagName("li")
@@ -154,6 +238,95 @@ li {
         var text = document.getElementById("alltext").value
         document.getElementById("hashs").innerHTML = (text.split("#").length - 1)
     }
+    function save_hash(){
+        var newJSON = JSON.stringify(alltags);
+        localStorage.setItem("alltags", newJSON);
+    }
+    function load_hash(){
+        if (localStorage.getItem("alltags")){
+            alltags = JSON.parse(localStorage.getItem("alltags"));
+            create_taglist(alltags.all.length )
+        }
+        create_new()
+    }
+    function create_new(){
+        var li = document.createElement("li");
+        li.id = alltags.all.length + 1;
+        li.innerHTML = "<img style='cursor:pointer; padding-left:calc(50% - 14px); padding-top:10px;' width='28px' height='28px' src='img/add.svg'>";
+        li.setAttribute('onclick', "editor(true,'NewTags')");
+        li.style = "border-bottom:0; padding-left:0; height:48px;"
+        ul.appendChild(li);
+    }
+    function delete_tags() {
+        for (i=0; i < alltags.all.length ; i++){
+            if (alltags.all[i] == edit_tag) { alltags.all.splice(i,1) }
+        }
+        delete alltags[edit_tag];
+        editor(false)
+    }
+    function update_tags() {
+        var new_tag = document.getElementsByClassName("title")[0].value;
+        if (new_tag != "") {
+            if (new_tag != edit_tag) {
+                if (edit_tag == 'NewTags') {
+                    alltags.all.push(new_tag);
+                } else {
+                    delete alltags[edit_tag];
+                    for (i=0; i < alltags.all.length ; i++) {
+                        if (alltags.all[i] == edit_tag) { alltags.all.splice(i,1,new_tag) }
+                    }
+                }
+                alltags[new_tag] = {}
+                for (i=0; i < alltags.lang.length ; i++) {
+                    alltags[new_tag][alltags.lang[i]] = document.getElementsByClassName(alltags.lang[i])[0].value;
+                }
+        } else {
+            for (i=0; i < alltags.lang.length ; i++){
+                alltags[edit_tag][alltags.lang[i]] = document.getElementsByClassName(alltags.lang[i])[0].value;
+            }
+        }
+        }
+        editor(false)
+    }
+    function editor(open,name) {
+        var editor = document.getElementById("editor");
+        var html;
+        if (open) {
+            edit_tag = name;
+            if (name == "NewTags"){
+                html = "<table style='width:100%;'><tbody><tr><td align='right' style='width:32px; padding-right:10px;'>Title :</td><td><input class='title' style='height:28px; width:100%;' type='text'></td></tr>";
+                for (i=0; i < alltags.lang.length ; i++){
+                    html = html + " <tr><td align='right' style='padding-right:10px;'>" + alltags.lang[i] + " :</td><td><input class='" + alltags.lang[i] + "' style='height:28px; width:100%;' type='text'></td></tr>";
+                }
+                document.getElementById("edit_tags").innerHTML = html + "</tbody></table>"
+            } else {
+                html = "<table style='width:100%;'><tbody><tr><td align='right' style='width:32px; padding-right:10px;'>Title :</td><td><input class='title' style='height:28px; width:100%;' type='text' value='" + name + "'></td></tr>";
+                for (i=0; i < alltags.lang.length ; i++){
+                    html = html + " <tr><td align='right' style='padding-right:10px;'>" + alltags.lang[i] + " :</td><td><input class='" + alltags.lang[i] + "' style='height:28px; width:100%;' type='text' value='" + alltags[name][alltags.lang[i]] + "'></td></tr>";
+                }
+                document.getElementById("edit_tags").innerHTML = html + "</tbody></table>"
+            }
+            editor.style.visibility = "visible"
+        } else {
+            editor.style.visibility = "hidden"
+            var ul = document.getElementById("taglist");
+            var child = ul.lastElementChild;
+            while (child) {
+                ul.removeChild(child);
+                child = ul.lastElementChild;
+            }
+            create_taglist(alltags.all.length )
+            save_hash()
+            create_new()
+        }
+    }
+function save_file() {
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(alltags));
+    var dlAnchorElem = document.getElementById('downloadAnchorElem');
+    dlAnchorElem.setAttribute("href", dataStr );
+    dlAnchorElem.setAttribute("download", "hashtags.json");
+    dlAnchorElem.click();
+}
 </script>
 </body>
 </html>

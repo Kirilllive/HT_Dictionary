@@ -1,0 +1,27 @@
+{
+		"lang": [
+			"ru",
+			"en",
+			"ja",
+			"ko",
+			"dop"
+		],
+        "all":[
+            "HotWheels",
+            "Tomica"
+        ],
+		"HotWheels": {
+		   "ru": "",
+		   "en": "hotwheels",
+		   "ja": "ホットウィール",
+		   "ko": "핫휠",
+		   "dop": "hotwheelscollector"
+		},
+		"Tomica": {
+            "ru": "",
+		   "en": "tomica",
+		   "ja": "トミカ",
+		   "ko": "토미카",
+		   "dop": "tomy #tomytec"
+		}
+}
