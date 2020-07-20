@@ -7,175 +7,21 @@
 			"dop"
 		],
         "all":[
-            "HotWheels",
-            "Tomica",
-            "Matchbox",
-            "art",
-            "Design",
-            "Character",
-            "game",
-            "video game",
-            "plant",
-            "flower",
-            "water",
-            "snow",
-            "Nature",
-            "Indie game",
-            "game dev",
-            "poster design",
-            "Poster",
-            "Icon",
-            "Penguin",
-            "architecture",
-            "Street",
-            "ice",
-            "forest"
+            "like4likes",
+            "photoday"
         ],
-		"art": {
-		   "ru": "арт",
-		   "en": "art",
-		   "ja": "芸術",
-		   "ko": "예술"
-		},
-		"Design": {
-		   "ru": "дизайн",
-		   "en": "design",
-		   "ja": "デザイン",
-		   "ko": "디자인"
-		},
-		"Character": {
-		   "ru": "персонаж",
-		   "en": "сharacter",
-		   "ja": "キャラクター",
-		   "ko": "등장인물"
-		},
-		"Nature": {
-		   "ru": "природа",
-		   "en": "nature",
-		   "ja": "自然",
-		   "ko": "자연"
-		},
-		"snow": {
-		   "ru": "снег",
-		   "en": "snow",
-		   "ja": "雪",
-		   "ko": "눈"
-		},
-		"water": {
-		   "ru": "вода",
-		   "en": "water",
-		   "ja": "水",
-		   "ko": "물"
-		},
-		"flower": {
-		   "ru": "цветок",
-		   "en": "flower",
-		   "ja": "花",
-		   "ko": "꽃"
-		},
-		"plant": {
-		   "ru": "растения",
-		   "en": "plant",
-		   "ja": "植物",
-		   "ko": "식물"
-		},
-		"video game": {
-		   "ru": "",
-		   "en": "videogame",
-		   "ja": "コンピュータゲーム",
-		   "ko": "비디오게임"
-		},
-		"game": {
-		   "ru": "игра",
-		   "en": "game",
-		   "ja": "ゲーム",
-		   "ko": "게임"
-		},
-		"Indie game": {
-		   "ru": "индиигра",
-		   "en": "indiegame",
-		   "ja": "同人ゲーム",
-		   "ko": "인디게임"
-		},
-		"game dev": {
-		   "ru": "",
-		   "en": "gamedev",
-		   "ja": "ゲームクリエイター",
-		   "ko": ""
-		},
-		"Poster": {
-		   "ru": "постер",
-		   "en": "poster",
-		   "ja": "ポスター",
-		   "ko": "포스터"
-		},
-		"poster design": {
-		   "ru": "",
-		   "en": "posterdesign",
-		   "ja": "ポスターデザイン",
-		   "ko": "포스터디자인"
-		},
-		"Icon": {
-		   "ru": "",
-		   "en": "icon",
-		   "ja": "アイコン",
-		   "ko": "아이콘"
-		},
-		"Penguin": {
-		   "ru": "пингвин",
-		   "en": "penguin",
-		   "ja": "ペンギン",
-		   "ko": "펭귄"
-		},
-		"architecture": {
-		   "ru": "архитектура",
-		   "en": "Architecture",
-		   "ja": "建築",
-		   "ko": "건축"
-		},
-		"Street": {
-		   "ru": "улица",
-		   "en": "street",
-		   "ja": "ストリート",
-		   "ko": "길거리"
-		},
-		"ice": {
-		   "ru": "лед",
-		   "en": "ice",
-		   "ja": "氷",
-		   "ko": "얼음"
-		},
-		"forest": {
-		   "ru": "лес",
-		   "en": "forest",
-		   "ja": "森林",
-		   "ko": "숲"
-		},
-		"Hot Wheels": {
-		   "ru": "",
-		   "en": "hotwheels",
-		   "ja": "ホットウィール",
-		   "ko": "핫휠"
-		},
-		"HotWheels": {
-		   "ru": "",
-		   "en": "hotwheels",
-		   "ja": "ホットウィール",
-		   "ko": "핫휠",
-		   "dop": "hotwheelscollector"
-		},
-		"Tomica": {
-		   "ru": "",
-		   "en": "tomica",
-		   "ja": "トミカ",
-		   "ko": "토미카",
-		   "dop": "tomy #tomytec"
-		},
-		"Matchbox":{
-		   "ru": "",
-		   "en": "Matchbox ",
-		   "ja": "マッチボックス",
+		"photoday": {
+		   "ru": "фотодня",
+		   "en": "photooftheday",
+		   "ja": "",
 		   "ko": "",
-		   "dop": "matchboxcars #matchboxcollector"
+		   "dop": ""
+		},
+		"like4likes": {
+            "ru": "лайкзалайк",
+		   "en": "like4likes",
+		   "ja": "",
+		   "ko": "",
+		   "dop": ""
 		}
 }

@@ -153,7 +153,16 @@ input:focus {
 <a id="downloadAnchorElem" style="display:none">
 <!--<script type="text/javascript" src="cordova.js"></script>-->
 <script>
-    var alltags;
+    let alltags = {
+            "lang": [
+                "ru",
+                "en",
+                "ja",
+                "ko",
+                "dop"
+            ],
+            "all":[]
+    };
     var img_file = document.getElementById('json_file');
     var ul = document.getElementById("taglist");
     var edit_mode = false;
