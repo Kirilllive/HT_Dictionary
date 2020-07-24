@@ -14,6 +14,12 @@
     text-decoration: none;
     font-size: 11px;
     outline: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 li {
 	height: 32px;
@@ -23,19 +29,21 @@ li {
     line-height: 32px;
     font-size: 11px;
     position: relative;
-    cursor:pointer;
 }
 .select{background-color:#eee; color:#000;}
 .button{
 	border-radius: 32px;
 	width: 100%;
 	height: 90%;
-    cursor:pointer;
+    background-color:#eee;
+}
+.button:active {
+    background-color:#ccc;
 }
 #editor {
     position: absolute;
-    top: 20%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
     left: 50%;
     background-color:#fff;
     border-radius: 16px;
@@ -73,6 +81,35 @@ input:focus {
     content: url('img/edit_on.svg');
     background: none;
  }
+
+#toast{
+    position: fixed;
+    opacity: 0;
+    top: -10%;
+    box-shadow: 0px 2px 24px rgba(0,0,0,0.25);
+}
+.toast_anim{
+    left: 50%;
+    transform: translateX(-50%);
+    height: 4em;
+    width: 20em;
+    background-color:#fff;
+    border-radius: 32px;
+    animation: viwe 0.25s, stop 2s 0.25s, close 0.5s 2s linear;
+}
+@keyframes viwe {
+  from {opacity: 0; top: 64px}
+  to {opacity: 1; top: 64px}
+}
+@keyframes stop {
+  from {opacity: 1; top: 64px}
+  to {opacity: 1; top: 64px}
+}
+@keyframes close {
+  from {opacity: 1; top: 64px}
+  to {opacity: 0; top: -32px}
+}
+
 </style>
 </head>
 <body onload="load_hash()">
@@ -91,7 +128,7 @@ input:focus {
                 </tbody>
             </table>
         </td>
-		<td align='center'><div>Hashtags: <span id="hashs">0</span> / 30</div></td>
+		<td align='center'><div>HashTags: <span id="hashs">0</span> / 30</div></td>
 	</tr>
 	<tr>
 		<td style="height: 75vh; min-width: 128px; width: 25%; border: 1px solid #888;">
@@ -112,14 +149,14 @@ input:focus {
 				<td  width='25px'>
 				</td>
 				<td align='center' width='256px' height='48px'>
-					<table class='button' onclick='text_clear()' style='background-color:#eee;'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/close.svg'></td><td align='center' id='copu' style='color: #000; font-size: 14px;'>Clear</td><td align='center' width='48px'></td></tr></tbody></table>
+					<table class='button' onclick='text_clear()'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/close.svg'></td><td align='center' id='copu' style='color: #000; font-size: 14px;'>Clear</td><td align='center' width='48px'></td></tr></tbody></table>
 				</td>
 				
 				<td  width='25px'>
 				</td>
 				
 				<td align='center' width='256px' height='48px'>
-					<table class='button' onclick='text_copy();' style='background-color:#eee;'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/copy.svg'></td><td align='center' id='past' style='color: #000; font-size: 14px;'>Copy</td><td align='center' width='48px'></td></tr></tbody></table>
+					<table class='button' onclick='text_copy();'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/copy.svg'></td><td align='center' id='past' style='color: #000; font-size: 14px;'>Copy</td><td align='center' width='48px'></td></tr></tbody></table>
 				</td>
 				<td  width='25px'>
 				</td>
@@ -139,15 +176,26 @@ input:focus {
         </tr>
         <tr>
             <td style="width: 50%; height:48px; padding-top:24px;">
-                <table class='button' onclick='delete_tags()' style='background-color:#eee;'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/delet.svg'></td><td align='center' id='past' style='color: #000; font-size: 14px;'>Delete</td><td align='center' width='48px'></td></tr></tbody></table>
+                <table class='button' onclick='delete_tags()'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/delet.svg'></td><td align='center' id='past' style='color: #000; font-size: 14px;'>Delete</td><td align='center' width='48px'></td></tr></tbody></table>
             </td>
         </tr>
         <tr>
             <td style="width:50%; height:48px; padding-top:12px;">
-                <table class='button' onclick='update_tags()' style='background-color:#eee;'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/ok.svg'></td><td align='center' id='copu' style='color: #000; font-size: 14px;'>OK</td><td align='center' width='48px'></td></tr></tbody></table>
+                <table class='button' onclick='update_tags()'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/ok.svg'></td><td align='center' id='copu' style='color: #000; font-size: 14px;'>OK</td><td align='center' width='48px'></td></tr></tbody></table>
             </td>
         </tr>
     </tbody>
+    </table>
+</div>
+<div id="toast">
+    <table border="0" height="100%" width="100%">
+        <tbody>
+            <tr>
+                <td align="center" valign="center" >
+                    <div id="toast_message"></div>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </div>
 <a id="downloadAnchorElem" style="display:none">
@@ -241,7 +289,8 @@ input:focus {
         copyText.select();
         copyText.setSelectionRange(0, 99999)
         document.execCommand("copy");
-        count_hash()
+        count_hash();
+        toast("Сopied");
     }
     function count_hash() {
         var text = document.getElementById("alltext").value
@@ -272,6 +321,7 @@ input:focus {
         }
         delete alltags[edit_tag];
         editor(false)
+        toast("HashTag deleted");
     }
     function update_tags() {
         var new_tag = document.getElementsByClassName("title")[0].value;
@@ -289,10 +339,12 @@ input:focus {
                 for (i=0; i < alltags.lang.length ; i++) {
                     alltags[new_tag][alltags.lang[i]] = document.getElementsByClassName(alltags.lang[i])[0].value;
                 }
+                toast("New HashTag created");
         } else {
             for (i=0; i < alltags.lang.length ; i++){
                 alltags[edit_tag][alltags.lang[i]] = document.getElementsByClassName(alltags.lang[i])[0].value;
             }
+            toast("HashTag changed");
         }
         }
         editor(false)
@@ -329,12 +381,45 @@ input:focus {
             create_new()
         }
     }
+
 function save_file() {
+    var d = new Date();
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(alltags));
     var dlAnchorElem = document.getElementById('downloadAnchorElem');
     dlAnchorElem.setAttribute("href", dataStr );
-    dlAnchorElem.setAttribute("download", "hashtags.json");
+    dlAnchorElem.setAttribute("download", 'ht_' + d.getFullYear() + d.getMonth() + d.getDay() +'_'+ d.getHours() + d.getMinutes() + d.getSeconds() +'.json');
     dlAnchorElem.click();
+}
+
+function save_file_app() {
+    var d = new Date();
+    var fileName = 'ht_' + d.getFullYear() + d.getMonth() + d.getDay() +'_'+ d.getHours() + d.getMinutes() + d.getSeconds() +'.json';
+    var fileData = JSON.stringify(alltags);
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSystem) {
+        fileSystem.root.getFile('/Download/'+fileName, {create: true, exclusive: false}, function (entry) {
+            var myFileUrl = entry.toURL()
+            entry.createWriter(function (writer) {
+                writer.onwriteend = function (evt) {
+                    toast("Save to Download/" + fileName)
+                }
+                writer.write(fileData)
+            }, function (error) {
+                alert("Error: Could not create file writer, " + error.code)
+            })
+        }, function (error) {
+            alert("Error: Could not create file, " + error.code)
+        })
+    }, function (evt) {
+        alert("Error: Could not access file system, " + evt.target.error.code)
+    })
+}
+
+function toast (message) {
+    var x = document.getElementById("toast");
+    x.classList.remove("toast_anim");
+    document.getElementById('toast_message').innerHTML = message
+    void x.offsetParent;
+    x.classList.add("toast_anim");
 }
 </script>
 </body>
