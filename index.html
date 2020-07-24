@@ -40,7 +40,7 @@ li {
 .button:active {
     background-color:#ccc;
 }
-#editor {
+.window {
     position: absolute;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
@@ -52,7 +52,6 @@ li {
     box-shadow: 0px 2px 24px rgba(0,0,0,0.25);
     z-index: 10000;
     padding: 8px;
-    visibility:hidden;
 }
 input {
   border: 0;
@@ -118,17 +117,12 @@ input:focus {
 	<tbody>
 		<tr>
         <td align='center'>
-            <table width="100%">
-                <tbody>
-                    <tr>
-                    <td align='center'><input id="edit_mode" type="checkbox" class="notification"></td>
-                    <td align='center'><img onclick="json_file.click()" style='cursor:pointer;' width='28px' height='28px' src='img/load.svg'></td>
-                    <td align='center'><img onclick="save_file()" style='cursor:pointer;' width='28px' height='28px' src='img/save.svg'></td>
-                    </tr>
-                </tbody>
-            </table>
+            <input id="edit_mode" type="checkbox" style='cursor:pointer;' class="notification">
         </td>
-		<td align='center'><div>HashTags: <span id="hashs">0</span> / 30</div></td>
+		<td align='center' style='padding-left: 24px;'><div>HashTags: <span id="hashs">0</span> / 30</div></td>
+        <td align='center' width='48px'>
+            <img style='cursor:pointer;' onclick='window_menu(true)' width='28px' height='28px' src='img/menu.svg'>
+        </td>
 	</tr>
 	<tr>
 		<td style="height: 75vh; min-width: 128px; width: 25%; border: 1px solid #888;">
@@ -137,7 +131,7 @@ input:focus {
 				</ul>
 			</div>
 		</td>
-		<td align='right' style='border: 1px solid #888;'>
+		<td align='right' style='border: 1px solid #888;'  colspan="2">
 			<textarea id="alltext" style="height:75vh; width:100%;"></textarea>
 		</td>
 	</tr>
@@ -168,7 +162,7 @@ input:focus {
 	</tbody>
 </table>
 
-<div id='editor'>
+<div id='editor' class='window' style='visibility:hidden;'>
     <table style="height: 100%; width: 100%;">
     <tbody>
         <tr>
@@ -182,6 +176,27 @@ input:focus {
         <tr>
             <td style="width:50%; height:48px; padding-top:12px;">
                 <table class='button' onclick='update_tags()'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/ok.svg'></td><td align='center' id='copu' style='color: #000; font-size: 14px;'>OK</td><td align='center' width='48px'></td></tr></tbody></table>
+            </td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+<div id='window_menu' class='window' style='visibility:hidden;'>
+    <table style="height: 100%; width: 100%;">
+    <tbody>
+        <tr>
+            <td style="width: 50%; height:48px; padding-top:12px;">
+                <table class='button' onclick='json_file.click()'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/load.svg'></td><td align='center' style='color: #000; font-size: 14px;'>Loas</td><td align='center' width='48px'></td></tr></tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:50%; height:48px; padding-top:12px;">
+                <table class='button' onclick='save_file()'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/save.svg'></td><td align='center' style='color: #000; font-size: 14px;'>Save</td><td align='center' width='48px'></td></tr></tbody></table>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:50%; height:48px; padding: 12px 0;">
+                <table class='button' onclick='window_menu(false)'><tbody><tr><td align='center' width='48px' style='padding-top:4px;'><img width='28px' height='28px' src='img/close.svg'></td><td align='center' style='color: #000; font-size: 14px;'>Close</td><td align='center' width='48px'></td></tr></tbody></table>
             </td>
         </tr>
     </tbody>
@@ -420,6 +435,11 @@ function toast (message) {
     document.getElementById('toast_message').innerHTML = message
     void x.offsetParent;
     x.classList.add("toast_anim");
+}
+function window_menu(open) {
+    var element = document.getElementById("window_menu");
+    if (open) {element.style.visibility = "visible";}
+    else {element.style.visibility = "hidden";}
 }
 </script>
 </body>
