@@ -53,7 +53,7 @@ li {
     z-index: 10000;
     padding: 8px;
 }
-input {
+.input_text {
   border: 0;
   border-bottom: 1px solid #ccc;
   font-family: inherit;
@@ -63,7 +63,7 @@ input {
   cursor: text;
 }
 
-input:focus {
+.input_text:focus {
   border-bottom: 1px solid #666;
 }
 .notification {
@@ -131,12 +131,12 @@ input:focus {
 				</ul>
 			</div>
 		</td>
-		<td align='right' style='border: 1px solid #888;'  colspan="2">
+		<td align='right' style='border: 1px solid #888;' colspan="2">
 			<textarea id="alltext" style="height:75vh; width:100%;"></textarea>
 		</td>
 	</tr>
 		<tr>
-		<td  colspan="2"  align='center'>
+		<td  colspan="3"  align='center'>
 			<table align='center' border='0'>
 			<tbody>
 			<tr>
@@ -248,6 +248,7 @@ input:focus {
                 create_taglist(alltags.all.length )
                 save_hash()
                 create_new()
+                window_menu(false)
             }
         };
         xmlhttp.open("GET", url, true);
@@ -370,15 +371,15 @@ input:focus {
         if (open) {
             edit_tag = name;
             if (name == "NewTags"){
-                html = "<table style='width:100%;'><tbody><tr><td align='right' style='width:32px; padding-right:10px;'>Title :</td><td><input class='title' style='height:28px; width:100%;' type='text'></td></tr>";
+                html = "<table style='width:100%;'><tbody><tr><td align='right' style='width:32px; padding-right:10px;'>Title :</td><td><input class='input_text title' style='height:28px; width:100%;' type='text'></td></tr>";
                 for (i=0; i < alltags.lang.length ; i++){
-                    html = html + " <tr><td align='right' style='padding-right:10px;'>" + alltags.lang[i] + " :</td><td><input class='" + alltags.lang[i] + "' style='height:28px; width:100%;' type='text'></td></tr>";
+                    html = html + " <tr><td align='right' style='padding-right:10px;'>" + alltags.lang[i] + " :</td><td><input class='input_text " + alltags.lang[i] + "' style='height:28px; width:100%;' type='text'></td></tr>";
                 }
                 document.getElementById("edit_tags").innerHTML = html + "</tbody></table>"
             } else {
-                html = "<table style='width:100%;'><tbody><tr><td align='right' style='width:32px; padding-right:10px;'>Title :</td><td><input class='title' style='height:28px; width:100%;' type='text' value='" + name + "'></td></tr>";
+                html = "<table style='width:100%;'><tbody><tr><td align='right' style='width:32px; padding-right:10px;'>Title :</td><td><input class='input_text title' style='height:28px; width:100%;' type='text' value='" + name + "'></td></tr>";
                 for (i=0; i < alltags.lang.length ; i++){
-                    html = html + " <tr><td align='right' style='padding-right:10px;'>" + alltags.lang[i] + " :</td><td><input class='" + alltags.lang[i] + "' style='height:28px; width:100%;' type='text' value='" + alltags[name][alltags.lang[i]] + "'></td></tr>";
+                    html = html + " <tr><td align='right' style='padding-right:10px;'>" + alltags.lang[i] + " :</td><td><input class='input_text " + alltags.lang[i] + "' style='height:28px; width:100%;' type='text' value='" + alltags[name][alltags.lang[i]] + "'></td></tr>";
                 }
                 document.getElementById("edit_tags").innerHTML = html + "</tbody></table>"
             }
