@@ -7,6 +7,8 @@ The application has a tag counter and a convenient interface for adding and remo
 
 Download for android https://play.google.com/store/apps/details?id=com.ed.hashtag_master
 
+For web browsers https://kirilllive.github.io/HashTag-Dictionary/
+
 ![HashTag Dictionary](screen.png)
 
 # Dictionary json file
